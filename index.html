@@ -1,11 +1,200 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Moja strona</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tanie okazje online – blog o mądrych zakupach</title>
+<meta name="description" content="Blog o tym, jak kupować taniej i nie dać się nabrać na fałszywe promocje.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏷️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#edf1f5; --surface:#ffffff; --ink:#14213d; --muted:#56637d;
+  --tag:#ffd23f; --tag-ink:#14213d; --line:#cfd8e3; --link:#1d4ed8;
+  --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1626; --surface:#17203a; --ink:#e9eefb; --muted:#9aa8c7;
+        --line:#2a3658; --link:#8fb0ff;}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.125rem/1.7 var(--body)}
+a{color:var(--link)}
+:focus-visible{outline:3px solid var(--link);outline-offset:3px;border-radius:4px}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.25rem}
+
+header.site{padding:1.25rem 0;border-bottom:2px solid var(--ink)}
+header.site .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.brand{font:800 1.4rem/1 var(--head);color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+nav a{font:500 1rem var(--head);color:var(--muted);margin-left:1.25rem;text-decoration:none}
+nav a:hover{color:var(--ink);text-decoration:underline}
+
+.hero{padding:3.5rem 0 2rem}
+.hero h1{font:800 clamp(2.4rem,8vw,4.2rem)/1.02 var(--head);letter-spacing:-.035em;margin:0 0 1rem;max-width:14ch}
+.hero p{margin:0;color:var(--muted);max-width:36rem}
+
+.tag{display:inline-block;position:relative;background:var(--tag);color:var(--tag-ink);
+  font:800 .95rem/1 var(--head);padding:.55rem .8rem .55rem 1.5rem;
+  clip-path:polygon(.7rem 0,100% 0,100% 100%,.7rem 100%,0 50%);white-space:nowrap}
+.tag::before{content:"";position:absolute;left:.65rem;top:50%;width:.4rem;height:.4rem;
+  margin-top:-.2rem;border-radius:50%;background:var(--bg)}
+
+.list{padding:1rem 0 4rem;display:grid;gap:1rem}
+.post-link{display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:1.4rem 1.5rem;text-decoration:none;color:inherit}
+.post-link:hover{border-color:var(--ink)}
+.post-link .top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.post-link h2{font:800 1.5rem/1.2 var(--head);letter-spacing:-.02em;margin:0 0 .4rem}
+.post-link p{margin:0;color:var(--muted);font-size:1rem;line-height:1.55}
+.date{display:block;margin-top:.8rem;font:500 .9rem var(--head);color:var(--muted)}
+
+article{padding:2.5rem 0 4rem}
+article .back{font:500 1rem var(--head);text-decoration:none}
+article h1{font:800 clamp(2rem,6vw,3rem)/1.08 var(--head);letter-spacing:-.03em;margin:1.2rem 0 1rem}
+article .meta{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:2rem;font:500 .95rem var(--head);color:var(--muted)}
+article h3{font:800 1.4rem/1.25 var(--head);margin:2rem 0 .5rem}
+article p{margin:0 0 1.2rem}
+article ul{padding-left:1.3rem;margin:0 0 1.2rem}
+article li{margin-bottom:.4rem}
+
+.about{border-top:2px solid var(--ink);padding:2.5rem 0 3rem}
+.about h2{font:800 1.6rem var(--head);margin:0 0 .5rem}
+footer{padding:1.5rem 0 3rem;color:var(--muted);font:.9rem var(--head)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <h1>Cześć! Moja strona działa 🎉</h1>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#" id="brand">Tanie okazje online</a>
+    <nav><a href="#" id="nav-home">Wpisy</a><a href="#o-blogu" id="nav-about">O blogu</a></nav>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<footer><div class="wrap">© <span id="year"></span> tanieokazjeonline.pl</div></footer>
+
+<script>
+/* ===== TUTAJ DODAJESZ WŁASNE WPISY =====
+   Skopiuj jeden blok { ... }, zmień tekst i dodaj go na początku listy.
+   slug  – krótki adres wpisu (bez polskich znaków i spacji)
+   saving – tekst na żółtej metce
+   body  – treść w HTML: <p>, <h3>, <ul><li> */
+const posts = [
+  {
+    slug: "jak-sprawdzic-promocje",
+    title: "Jak sprawdzić, czy promocja jest prawdziwa",
+    date: "30 października 2026",
+    read: "3 min czytania",
+    saving: "oszczędzasz nerwy",
+    excerpt: "Przekreślona cena nic jeszcze nie znaczy. Trzy sprawdzenia, które zajmują minutę.",
+    body: `
+      <p>Sklepy uwielbiają przekreślone ceny. Problem w tym, że stara cena bywa wymyślona, a „-50%” liczy się od kwoty, której nikt nigdy nie zapłacił.</p>
+      <h3>1. Zobacz najniższą cenę z 30 dni</h3>
+      <p>W Unii Europejskiej sklep, który ogłasza obniżkę, musi pokazać najniższą cenę z ostatnich 30 dni przed obniżką. Szukaj jej drobnym drukiem przy cenie. Jeśli różnica jest niewielka, „okazja” jest głównie w marketingu.</p>
+      <h3>2. Sprawdź historię ceny</h3>
+      <p>Porównywarki i serwisy z historią cen pokażą wykres. Jeśli cena skacze w górę tuż przed promocją, a potem wraca do normalnej, to znak, że nic nie zyskujesz.</p>
+      <h3>3. Porównaj z innym sklepem</h3>
+      <p>Wpisz dokładny model produktu w porównywarkę. Ten sam towar często kosztuje mniej u konkurencji, nawet bez żadnej promocji.</p>
+      <p>Jeśli dwa z trzech sprawdzeń wychodzą dobrze, kupuj spokojnie. Jeśli nie, poczekaj kilka dni.</p>`
+  },
+  {
+    slug: "uzywane-taniej",
+    title: "Gdzie kupić dobre rzeczy używane",
+    date: "28 października 2026",
+    read: "4 min czytania",
+    saving: "do -70%",
+    excerpt: "Ubrania, elektronika, meble. Jak szukać i na co uważać, żeby nie przepłacić.",
+    body: `
+      <p>Używane nie znaczy gorsze. Wiele rzeczy ledwo zdążyło stracić świeżość, a cena spada o połowę.</p>
+      <ul>
+        <li><strong>Vinted</strong> – ubrania i dodatki, często z metkami.</li>
+        <li><strong>OLX i Allegro Lokalnie</strong> – meble, sprzęt, rowery, narzędzia.</li>
+        <li><strong>Grupy i Marketplace na Facebooku</strong> – oferty z twojej okolicy, łatwy odbiór osobisty.</li>
+      </ul>
+      <h3>Zasady, które chronią portfel</h3>
+      <p>Pytaj o więcej zdjęć, zwłaszcza wad. Sprawdź, jak długo sprzedawca ma konto. Przy elektronice poproś o dowód zakupu albo numer seryjny. A jeśli oferta brzmi zbyt dobrze, żeby była prawdziwa, pewnie taka jest.</p>
+      <p>Bezpieczniej płacić przez wbudowane w serwis opcje niż przelewem na prywatne konto.</p>`
+  },
+  {
+    slug: "czarny-piatek",
+    title: "Czarny piątek: jak się nie dać nabrać",
+    date: "25 października 2026",
+    read: "3 min czytania",
+    saving: "plan = zysk",
+    excerpt: "Lista życzeń, limit i trzy pytania przed każdym kliknięciem „Kup teraz”.",
+    body: `
+      <p>Największe wyprzedaże działają na tej samej zasadzie: presja czasu i liczniki „zostało 3 sztuki”. Najlepsza obrona to plan przygotowany wcześniej.</p>
+      <h3>Zanim zacznie się wyprzedaż</h3>
+      <ul>
+        <li>Spisz rzeczy, które i tak miałeś kupić.</li>
+        <li>Zapisz ich zwykłe ceny. Wtedy łatwo ocenisz, czy promocja jest prawdziwa.</li>
+        <li>Ustal limit wydatków i się go trzymaj.</li>
+      </ul>
+      <h3>Trzy pytania przed zakupem</h3>
+      <p>Czy kupiłbym to w normalnej cenie? Czy miałem to na liście przed wyprzedażą? Czy za tydzień będę z tego zadowolony? Jeśli odpowiedź choć raz brzmi „nie”, zamknij kartę.</p>`
+  }
+];
+/* ===== KONIEC SEKCJI Z WPISAMI ===== */
+
+const app = document.getElementById("app");
+document.getElementById("year").textContent = new Date().getFullYear();
+
+function home() {
+  document.title = "Tanie okazje online – blog o mądrych zakupach";
+  app.innerHTML = `
+    <section class="hero">
+      <h1>Kupuj taniej, bez ściemy.</h1>
+      <p>Praktyczne wpisy o prawdziwych promocjach, używanych rzeczach i zakupach, których nie będziesz żałować.</p>
+    </section>
+    <section class="list" aria-label="Lista wpisów">
+      ${posts.map(p => `
+        <a class="post-link" href="#${p.slug}">
+          <div class="top">
+            <div>
+              <h2>${p.title}</h2>
+              <p>${p.excerpt}</p>
+            </div>
+            <span class="tag">${p.saving}</span>
+          </div>
+          <span class="date">${p.date} · ${p.read}</span>
+        </a>`).join("")}
+    </section>
+    <section class="about" id="o-blogu">
+      <h2>O blogu</h2>
+      <p>Tu zbieram sprawdzone sposoby na tańsze zakupy. Bez reklam udających porady. Zmień ten tekst na własny w pliku <code>index.html</code>.</p>
+    </section>`;
+}
+
+function post(p) {
+  document.title = p.title + " – Tanie okazje online";
+  app.innerHTML = `
+    <article>
+      <a class="back" href="#">← Wszystkie wpisy</a>
+      <h1>${p.title}</h1>
+      <div class="meta"><span class="tag">${p.saving}</span><span>${p.date} · ${p.read}</span></div>
+      ${p.body}
+    </article>`;
+}
+
+function route() {
+  const slug = location.hash.slice(1);
+  const p = posts.find(x => x.slug === slug);
+  if (p) { post(p); window.scrollTo(0, 0); }
+  else {
+    home();
+    if (slug === "o-blogu") document.getElementById("o-blogu").scrollIntoView();
+    else window.scrollTo(0, 0);
+  }
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
 </body>
 </html>
